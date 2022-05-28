@@ -280,8 +280,8 @@ camera:
 
   - platform: ffmpeg
     name: YoSee # ESCAM Q6 Button
-#    input: !secret cam_yoosee
-    input: -rtsp_transport udp -i rtsp://admin:Abirf1209@192.168.230.120:554/onvif1
+    input: !secret cam_yoosee
+#    input: -rtsp_transport udp -i rtsp://admin:Abirf1209@192.168.230.120:554/onvif1
 #    extra_arguments: -pred 1 -q:v 2
 #    extra_arguments: '-bsf:a aac_adtstoasc'
     
