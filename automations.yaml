@@ -1,0 +1,1344 @@
+- id: 18e2794976ef4664a10050a3473d0821
+  alias: 5.6) Б.окно окрыть 10% (433)
+  description: Окно большой комнаты открыть на 10% (динамик, пульт без кольца)
+  trigger:
+  - entity_id: switch.b_okno_15
+    platform: state
+    to: 'off'
+  action:
+  - service: cover.set_cover_position
+    data:
+      position: 10
+    target:
+      entity_id: cover.drivent_9e5
+  - entity_id: switch.b_okno_15
+    service: switch.turn_on
+  mode: single
+- id: 3600152e5a9b49d79619c9df88ebb4d6
+  alias: 5.9) Б.окно закрыть (433)
+  description: Закрыть окно большой комнаты (433 без кольца)
+  trigger:
+  - entity_id: switch.b_okno_zakryt
+    platform: state
+    to: 'off'
+    from: 'on'
+  action:
+  - service: cover.close_cover
+    target:
+      entity_id: cover.drivent_9e5
+  - entity_id: switch.b_okno_zakryt
+    service: switch.turn_on
+  mode: single
+- id: 8cca9253ffc3485c9ed95a5b5dcf0e8e
+  alias: 5.8) Б. окно открыть (433)
+  description: Окно большой комнаты открыть на 100% (пульт без кольца)
+  trigger:
+  - entity_id: switch.b_okno_otkryt
+    platform: state
+    to: 'off'
+  action:
+  - service: cover.open_cover
+    target:
+      entity_id: cover.drivent_9e5
+  - service: switch.turn_on
+    target:
+      entity_id: switch.b_okno_otkryt
+  mode: single
+- id: c64cb4073470407bba6dc5f85aca4cc9
+  alias: 5.2) Свет б. комнаты выключить (433)
+  description: 433  брелок с кольцом, левая кнопка - открыть
+  trigger:
+  - platform: state
+    entity_id: switch.pult_1_svet_vykl
+    to: 'off'
+  action:
+  - service: light.turn_on
+    data:
+      entity_id: light.big_lights_2
+      brightness: 0
+  - service: light.turn_on
+    data:
+      brightness: 0
+    target:
+      entity_id: light.small_lights_2
+  - service: switch.turn_on
+    entity_id: switch.pult_1_svet_vykl
+  mode: single
+- id: a84e88f0efd240019370a29ded137f6b
+  alias: 5.4) Свет б. комнаты ВКЛ. (433)
+  description: Брелок с кольцом, правая большая
+  trigger:
+  - platform: state
+    entity_id: switch.pult_1_svet_vkl
+    to: 'off'
+  action:
+  - service: switch.turn_on
+    entity_id: switch.pult_1_svet_vkl
+  - service: light.turn_on
+    data:
+      entity_id: light.big_lights_2
+      brightness: 255
+  - service: light.turn_on
+    data:
+      brightness: 255
+    target:
+      entity_id: light.small_lights_2
+  mode: single
+- id: bee66c0b0cf24a05ad723e2797c6e303
+  alias: 5.1) Свет б. комнаты >  mode NIGHT 433
+  description: Брелок 433 с кольцом, кнопка молния, свет в большой на 30%
+  trigger:
+  - platform: state
+    entity_id: switch.pult_1_nochnik
+    to: 'on'
+  action:
+  - service: light.turn_on
+    data:
+      entity_id: light.big_lights_2
+      brightness: 30
+  - service: light.turn_on
+    data:
+      brightness: 0
+    target:
+      entity_id: light.small_lights_2
+  - service: switch.turn_off
+    entity_id: switch.pult_1_nochnik
+  mode: single
+- id: c43ccdd258104db5bd73a1960fac1d72
+  alias: 9.2 ON Light DAY in the Holl from Motion (PIR)
+  description: 'Включение света в коридоре ДНЁМ '
+  trigger:
+  - entity_id: binary_sensor.motion_holl_1_1_2
+    from: 'off'
+    platform: state
+    to: 'on'
+  condition:
+  - condition: state
+    entity_id: light.holl_lights
+    state: 'off'
+  - condition: and
+    conditions:
+    - after: sunrise
+      after_offset: -01:00:00
+      before: sunset
+      before_offset: 06:00:00
+      condition: sun
+    - condition: or
+      conditions:
+      - condition: time
+        after: 08:00:00
+        before: '22:00'
+  action:
+  - brightness_pct: 100
+    device_id: 33b1c560942248aa9fdd94ae9b6ec4af
+    domain: light
+    entity_id: light.holl_lights
+    flash: long
+    type: turn_on
+  mode: single
+- id: 43424845529a4a359b550d8fa96a65d0
+  alias: 9.1 OFF Light in the Holl from Motion (PIR) 5min after last movement
+  description: Выключать через 2 мин. после бездействия
+  trigger:
+  - entity_id: binary_sensor.motion_holl_1_1_2
+    for: 0:02:00
+    platform: state
+    to: 'off'
+  action:
+  - device_id: 33b1c560942248aa9fdd94ae9b6ec4af
+    domain: light
+    entity_id: light.holl_lights
+    type: turn_off
+  mode: single
+- id: be1f6be1f382463eacab52ce0a787884
+  alias: 8.2) Mat under of table ON
+  description: коврик под столом включается
+  trigger:
+  - entity_id: switch.sony_notebook_wol
+    platform: state
+    to: 'on'
+  - entity_id: binary_sensor.pc_home_eth
+    platform: state
+    to: 'on'
+  action:
+  - data:
+      entity_id: climate.kovrik
+      temperature: 36
+      hvac_mode: heat
+    entity_id: climate.kovrik
+    service: climate.set_temperature
+  mode: single
+- id: ca4207cec99941869994db3fbecda2f2
+  alias: 8.1) Mat under of table OFF
+  description: коврик под столом выключается
+  trigger:
+  - entity_id: switch.sony_notebook_wol
+    platform: state
+    to: 'off'
+  - entity_id: binary_sensor.pc_home_eth
+    platform: state
+    to: 'off'
+  condition: []
+  action:
+  - data: {}
+    entity_id: climate.kovrik
+    service: climate.turn_off
+  mode: single
+- id: e7b33028806c4ab8bf550e09f1960a26
+  alias: 17) Домофон, когда звонят  -> Telegram
+  description: Когда звонят в дверь
+  trigger:
+  - entity_id: binary_sensor.domofon_incoming_call
+    from: 'off'
+    platform: state
+    to: 'on'
+  action:
+  - data:
+      message: Звонок в домофон!
+    service: notify.share_chat
+  - data:
+      message: Звонок в домофон!!! Посмотри!
+    service: notify.lg_webos_smart_tv
+  mode: single
+- id: '1584809584102'
+  alias: 15) Выключение света при вкл TV LG
+  description: Выключение света при Телевизоре
+  trigger:
+  - entity_id: media_player.lg_webos_smart_tv
+    platform: state
+    to: 'on'
+  condition: []
+  action:
+  - device_id: 7b2f58d877804163925de34fb727ebb6
+    domain: light
+    entity_id: light.small_lights_2
+    type: turn_off
+  mode: single
+- id: 71640dde50a14cc1b3cfb2fd84db8c0f
+  alias: 6.2) Perform Auto Backup
+  description: 'Накопительный '
+  trigger:
+  - platform: time_pattern
+    hours: /3
+  action:
+  - service: auto_backup.snapshot_partial
+    data_template:
+      name: 'AutoBackup: {{ now().strftime(''%a, %-I:%M %p (%d/%m/%Y)'') }}'
+      addons:
+      - core_mosquitto
+      - hacs
+      folders:
+      - homeassistant
+      - ssl
+      - www
+      - esphome
+      - image
+      - Local add-ons
+      keep_days: 2
+  mode: single
+- id: 3cf65fea766c4078afa54f662ee33ca6
+  alias: 6.1) Daily Backup
+  description: Ежедневный
+  trigger:
+  - at: 02:30:00
+    platform: time
+  condition:
+  - condition: time
+    weekday:
+    - tue
+    - wed
+    - thu
+    - fri
+    - sat
+    - sun
+  action:
+  - data_template:
+      keep_days: 7
+      name: 'DailyBackup: {{ now().strftime(''%A, %B %-d, %Y'') }}'
+    service: auto_backup.snapshot_partial
+  mode: single
+- id: 0053bb0557064ce0b810b081160764e0
+  alias: 6.3) Backup FULL
+  trigger:
+  - at: 02:30
+    platform: time
+  condition:
+  - condition: time
+    weekday:
+    - mon
+    - fri
+  action:
+  - service: auto_backup.backup_full
+    data:
+      name: Automatic Backup {{ now().strftime('%Y-%m-%d') }}
+      exclude:
+        addons:
+        - Media
+        - Zigbee2mqtt
+        - MariaDB
+        folders:
+        - Local add-ons
+        - share
+        - media
+        - Plex
+      keep_days: 28
+  mode: single
+- id: '1586246061847'
+  alias: 13) Vacuum cleaner ERROR
+  description: Пылесос в ошибке
+  trigger:
+  - entity_id: vacuum.roborock_vacuum_s5
+    platform: state
+    to: error
+  - entity_id: vacuum.xiaomi_vacuum_cleaner
+    platform: state
+    to: In Error
+  - entity_id: vacuum.xiaomi_vacuum_cleaner
+    platform: state
+    to: charging error
+  - entity_id: vacuum.xiaomi_vacuum_cleaner
+    from: error
+    platform: state
+  condition: []
+  action:
+  - data:
+      message: "Статус пылесоса:{% if is_state('vacuum.xiaomi_vacuum_cleaner', 'No\
+        \ Error')  %}\n  {{states.vacuum.xiaomi_vacuum_cleaner.state}}\n{% else %}\n\
+        \  {{states.vacuum.xiaomi_vacuum_cleaner.state}}\n{% endif %}"
+    service: notify.telegram
+  - data:
+      message: Что-то случилось с роботом-пылесосом, проверь!!!
+    service: notify.lg_webos_smart_tv
+  mode: single
+- id: '1588940530642'
+  alias: 7) Домофон, открыть дверь подъезда (433)
+  description: Переключение домофона в режим откр. один раз и обратно с брелка 433МГц
+  trigger:
+  - entity_id: switch.koridor_perekliuchenie_domofona
+    from: 'on'
+    platform: state
+    to: 'off'
+  condition: []
+  action:
+  - device_id: 7dd5b97dcfbd4fd1a8a3aae96a93cb07
+    domain: light
+    entity_id: light.domofon_led
+    type: turn_off
+  - data: {}
+    entity_id: switch.koridor_perekliuchenie_domofona
+    service: switch.turn_on
+  mode: single
+- id: '1589384291563'
+  alias: '23) Света коридора, розетка на стене '
+  description: от долгого нажатия сенсора розеток - > свет в коридоре на 100%
+  trigger:
+  - device_id: 27fa0e481543400e97e3e639299ca41f
+    domain: switch
+    entity_id: switch.dolgoe_nazhatie_sensora
+    platform: device
+    type: turned_on
+  - device_id: 27fa0e481543400e97e3e639299ca41f
+    domain: switch
+    entity_id: switch.dolgoe_nazhatie_sensora
+    platform: device
+    type: turned_off
+  condition: []
+  action:
+  - brightness_pct: 100
+    device_id: 33b1c560942248aa9fdd94ae9b6ec4af
+    domain: light
+    entity_id: light.holl_lights
+    flash: long
+    type: turn_on
+  mode: single
+- id: '1594399997894'
+  alias: 9.3 ON Light NIGHT in the Holl from Motion (PIR)
+  description: Включение НОЧЬЮ ночника по движению
+  trigger:
+  - entity_id: binary_sensor.motion_holl_1_1_2
+    platform: state
+    to: 'on'
+    from: 'off'
+  condition:
+  - condition: device
+    device_id: 33b1c560942248aa9fdd94ae9b6ec4af
+    domain: light
+    entity_id: light.holl_lights
+    for:
+      hours: 0
+      minutes: 0
+      seconds: 1
+    type: is_off
+  - condition: and
+    conditions:
+    - condition: state
+      entity_id: sun.sun
+      state: below_horizon
+      for:
+        hours: 0
+        minutes: 0
+        seconds: 0
+        milliseconds: 0
+    - condition: not
+      conditions:
+      - condition: time
+        after: 07:59
+        before: '22:00'
+  action:
+  - brightness_pct: 12
+    device_id: 33b1c560942248aa9fdd94ae9b6ec4af
+    domain: light
+    entity_id: light.holl_lights
+    flash: long
+    type: turn_on
+  mode: single
+  max: 10
+- id: '1594405555401'
+  alias: 12.1) Tariff Daily T1
+  description: 'Режим сбора данных счетчика - Дневной тариф T1 '
+  trigger:
+  - at: 07:00:05
+    platform: time
+  condition: []
+  action:
+  - data:
+      option: день_T1
+    entity_id: input_select.nrg_mode
+    service: input_select.select_option
+  - data:
+      tariff: день_T1
+    entity_id: utility_meter.daily_energy
+    service: utility_meter.select_tariff
+  - data:
+      tariff: день_T1
+    entity_id: utility_meter.total_energy
+    service: utility_meter.select_tariff
+  mode: single
+- id: '1594979913239'
+  alias: 12.2) Tariff Nighty T2
+  description: Режим сбора данных счетчика - Ночной тариф = T2
+  trigger:
+  - at: '23:00:05'
+    platform: time
+  condition: []
+  action:
+  - data:
+      option: ночь_T2
+    entity_id: input_select.nrg_mode
+    service: input_select.select_option
+  - data:
+      tariff: ночь_T2
+    entity_id: utility_meter.daily_energy
+    service: utility_meter.select_tariff
+  - data:
+      tariff: ночь_T2
+    entity_id: utility_meter.total_energy
+    service: utility_meter.select_tariff
+  mode: single
+- id: '1594992771587'
+  alias: 3) Потоп воды (Telegram)
+  description: Если попала вода на какой-то из 3 датчиков (ванна или кухня), откл.
+    стиралку, чтоб не сгорела без воды
+  trigger:
+  - entity_id: binary_sensor.wet_bottom_stiralka_4_1pin
+    for: 00:00:10
+    from: 'off'
+    platform: state
+    to: 'on'
+  - entity_id: binary_sensor.wet_floor_bath_3_1pin
+    for: 00:00:10
+    from: 'off'
+    platform: state
+    to: 'on'
+  - entity_id: binary_sensor.wet_floor_kitchen_5_1pin
+    for: 00:00:10
+    from: 'off'
+    platform: state
+    to: 'on'
+  condition: []
+  action:
+  - data:
+      message: "ПOTOП!!!  Сработал датчик воды,  {% if\nis_state(\"binary_sensor.wet_floor_kitchen_5_1pin\"\
+        , \"on\") %} - На кухне мокро! {% else %} - На кухне сухо. {% endif %} {%\
+        \ if\nis_state(\"binary_sensor.wet_bottom_stiralka_4_1pin\", \"on\") %} -\
+        \ Под стиралкой вода! {% else %} - Под стиралкой сухо. {% endif %} {% if\n\
+        is_state(\"binary_sensor.wet_floor_bath_3_1pin\", \"on\") %} - Под раковиной\n\
+        вода! {% else %} - Под раковиной сухо. {% endif %}\n Автоматически перекроется\
+        \ подача воды. Чтобы вода включалась, необходимо\n просушить датчики или нажать\
+        \ левую кнопку в лючке стояка - ДОЛГО."
+    service: notify.share_chat
+  - service: tts.google_say
+    data:
+      entity_id: media_player.player_vlc
+      message: ПOTOП, потоп!  Сработал датчик воды, Автоматически перекроется подача
+        воды. Чтобы вода включалась, необходимо просушить датчики или нажать долго
+        сенсор в лючьке в ванной.
+  - data:
+      message: ПОТОП воды!!! СРОЧНО проверить Ванну и Кухню!  {{ binary_sensor.wet_bottom_stiralka_4_1pin
+        }}
+    service: notify.lg_webos_smart_tv
+  - type: turn_on
+    device_id: a80fae3c034f4c5ba566f2ca24a0fa22
+    entity_id: light.logia_main_lamp
+    domain: light
+    brightness_pct: 100
+  - data:
+      effect: Alarm
+    entity_id: light.holl_lights
+    service: light.turn_on
+  - data:
+      effect: Alarm
+    service: light.turn_on
+    target:
+      entity_id: light.small_lights_2
+  - service: esphome.bath_mirror_play_rtttl
+    data:
+      song_str: siren:d=8,o=5,b=100:d,e,d,e,d,e,d,e,d,e,d,e,d,e,d,e,d,e,d,e,d,e,d,e,d,e,d,e,d,e,d,e
+  - type: turn_off
+    device_id: 30bdc3102238f18e71b05f4415e5dd15
+    entity_id: switch.switch_run_machine
+    domain: switch
+  mode: single
+- id: '1594994236509'
+  alias: 19.1) Кто-то пришел домой (входная дверь) telegram
+  description: При срабатывании датчика двери, без PIR коридора.
+  trigger:
+  - entity_id: binary_sensor.door_magnetic_7_1_2
+    from: 'off'
+    platform: state
+    to: 'on'
+  condition:
+  - condition: and
+    conditions:
+    - condition: state
+      entity_id: binary_sensor.motion_holl_1_1_2
+      state: 'off'
+      for: 00:00:10
+  action:
+  - brightness_pct: 100
+    device_id: 33b1c560942248aa9fdd94ae9b6ec4af
+    domain: light
+    entity_id: light.holl_lights
+    flash: long
+    type: turn_on
+  - service: media_player.media_stop
+    data: {}
+    entity_id: media_player.player_vlc
+  - delay: 00:00:03
+  - delay: 00:00:03
+  - service: telegram_bot.send_photo
+    data:
+      url: http://hass.h:9001/picture/1/current/?_username=admin&_signature=1f56b32601051dfab5768cece38af1c57c773044
+      authentication: digest
+      caption: '{{now().strftime(''%H:%Mмин. %d-%m-%Y.'')}} Входная дверь. Ключ =  {%
+        if     is_state("sensor.vimalock_inserted","02") %}02-Серёжки. {% else %}
+        {% if     is_state("sensor.vimalock_inserted","05") %}05-Лена. {% else %}
+        {% if     is_state("sensor.vimalock_inserted","01") %}01-Папа. {% else %}
+        {{     states.sensor.vimalock_inserted.state }}-НЕИЗВЕСТНЫЙ. {% endif %} {%
+        endif     %} {% endif %}'
+  - service: tts.google_say
+    data:
+      entity_id: media_player.player_vlc
+    data_template:
+      message: 'Привет, и о погоде. Завтра около {{states(''sensor.openweathermap_forecast_temperature'')|float|round(0)}}
+        градусов. Скорость ветра {{states(''sensor.openweathermap_forecast_wind_speed'')|float|round(0)}}
+        метров в секунду. Выпадение осадков  {{states(''sensor.openweathermap_forecast_precipitation'')|float|round(0)}}
+        миллиметров. '
+  mode: single
+  max: 2
+- id: '1596365441304'
+  alias: 14) Входная дверь открыта более 60 сек
+  description: Если долго открыта входная дверь
+  trigger:
+  - entity_id: binary_sensor.door_magnetic_7_1_2
+    for: 00:01:00
+    from: 'off'
+    platform: state
+    to: 'on'
+  condition: []
+  action:
+  - data:
+      message: Слишком долго открыта входная дверь! Проверить!
+    service: notify.lg_webos_smart_tv
+  - device_id: a80fae3c034f4c5ba566f2ca24a0fa22
+    domain: switch
+    entity_id: switch.lodzhiia_bizzer
+    type: turn_on
+  - data:
+      filename: /share/snapshot_door.jpg
+    service: camera.snapshot
+    target:
+      entity_id: camera.yosee
+  - delay:
+      hours: 0
+      minutes: 0
+      seconds: 5
+      milliseconds: 0
+  - data:
+      caption: Открыта дверь более 60сек.
+      file: /share/snapshot_door.jpg
+      target: -461871972
+    service: telegram_bot.send_photo
+  - service: tts.google_say
+    data:
+      entity_id: media_player.player_vlc
+      message: Внимание, слишком долго открыта входная дверь! Прошу проверить!
+  mode: single
+  max: 2
+- id: '1596388898562'
+  alias: 19.2) Кто-то уходит из дома, а окна не закрыты
+  description: 'Инфа, где не закрыто. Сработал датчик движения и открылась дверь '
+  trigger:
+  - type: motion
+    platform: device
+    device_id: e63eb750a744e41f741f94efa2be6f9c
+    entity_id: binary_sensor.motion_holl_1_1_2
+    domain: binary_sensor
+    for:
+      hours: 0
+      minutes: 0
+      seconds: 5
+      milliseconds: 0
+  condition:
+  - condition: and
+    conditions:
+    - type: is_open
+      condition: device
+      device_id: e63eb750a744e41f741f94efa2be6f9c
+      entity_id: binary_sensor.door_magnetic_7_1_2
+      domain: binary_sensor
+      for:
+        hours: 0
+        minutes: 0
+        seconds: 0
+        milliseconds: 0
+  - condition: and
+    conditions:
+    - type: is_open
+      condition: device
+      device_id: e63eb750a744e41f741f94efa2be6f9c
+      entity_id: binary_sensor.win_logia_9_1_2
+      domain: binary_sensor
+      for:
+        hours: 0
+        minutes: 0
+        seconds: 15
+        milliseconds: 0
+    - condition: or
+      conditions:
+      - type: is_open
+        condition: device
+        device_id: d45357bcfa886d2d3aae74857e48a381
+        entity_id: binary_sensor.window_kitchen_1_1
+        domain: binary_sensor
+        for:
+          hours: 0
+          minutes: 0
+          seconds: 15
+          milliseconds: 0
+      - condition: or
+        conditions:
+        - type: is_open
+          condition: device
+          device_id: 386dc52cd88f943b78e207884b3cc69d
+          entity_id: binary_sensor.win_big_room
+          domain: binary_sensor
+          for:
+            hours: 0
+            minutes: 0
+            seconds: 15
+            milliseconds: 0
+  action:
+  - type: turn_off
+    device_id: 33b1c560942248aa9fdd94ae9b6ec4af
+    entity_id: light.holl_lights
+    domain: light
+  - delay:
+      hours: 0
+      minutes: 0
+      seconds: 0
+      milliseconds: 0
+  - service: esphome.esp32_play_rtttl
+    data:
+      song_str: siren:d=8,o=5,b=100:d,e,d,e,d,e,d
+  - service: notify.share_chat
+    data:
+      message: Кто-то вышел из дома и не закрыл все окна. {% if is_state("binary_sensor.window_kitchen_1_1",
+        "on") %} На кухне не закрыто! {% endif %} {% if is_state("binary_sensor.win_logia_9_1_2",
+        "on") %}  На лоджии не закрыто! {% endif %}
+  mode: single
+- id: '1596558350709'
+  alias: 2) Пожар
+  description: Сработал датчик дыма на потолке
+  trigger:
+  - entity_id: binary_sensor.fire_kitchen_2_1_2
+    from: 'off'
+    platform: state
+    to: 'on'
+    for:
+      hours: 0
+      minutes: 0
+      seconds: 2
+  - entity_id: binary_sensor.fire_sm_room_4_1_2
+    from: 'off'
+    platform: state
+    to: 'on'
+    for:
+      hours: 0
+      minutes: 0
+      seconds: 2
+  - entity_id: binary_sensor.fire_big_room_5_1_2
+    from: 'off'
+    platform: state
+    to: 'on'
+    for:
+      hours: 0
+      minutes: 0
+      seconds: 2
+  condition: []
+  action:
+  - service: notify.share_chat
+    data:
+      message: Кажись пожар!!! Сработал датчик дыма на кухне или из комнат. Срочно
+        все погасить, начать с рубильника в прихожей! {% if is_state("binary_sensor.fire_kitchen_2_1_2",
+        "on") %} На кухне пожар! {% else %} На кухне НЕТ пожара. {% endif %} {% if
+        is_state("binary_sensor.fire_sm_room_4_1_2", "on") %}  В маленькой комнате
+        пожар! {% else %} В маленькой комнате НЕТ пожара. {% endif %} {% if is_state("binary_sensor.fire_big_room_5_1_2",
+        "on") %} В большой комнате пожар! {% else %} В большой комнате НЕТ пожара.
+        {% endif %}
+  - service: esphome.air_play_rtttl_air
+    data:
+      song_str: siren:d=8,o=5,b=100:d,e,d,e,d,e,d,e,d,e,d,e,d,e,d,e,d,e,d,e,d,e,d,e,d,e,d,e,d,e,d,e
+  - data:
+      effect: strobe effect
+    service: light.turn_on
+    target:
+      entity_id: light.small_lights_2
+  - type: turn_on
+    device_id: 7b2f58d877804163925de34fb727ebb6
+    entity_id: light.big_lights_2
+    domain: light
+    brightness_pct: 100
+  mode: parallel
+  max: 10
+- id: '1603375273628'
+  alias: 20) Кто-то Свет в ванной забыл
+  description: Если никого нет в ванной и горит свет (более >25 минут)
+  trigger:
+  - platform: numeric_state
+    entity_id: sensor.lux_sensor_in_the_bath
+    above: '1000'
+    for: 00:25:00
+  condition:
+  - condition: and
+    conditions:
+    - type: is_no_motion
+      condition: device
+      device_id: 04f87474e09f420b8dc5d1f714af316b
+      entity_id: binary_sensor.mirrorbath_pir
+      domain: binary_sensor
+      for:
+        hours: 0
+        minutes: 20
+        seconds: 0
+  action:
+  - service: notify.share_chat
+    data:
+      message: Свет в ванной забыли выключить.
+  - service: tts.google_say
+    data:
+      entity_id: media_player.player_vlc
+      message: Друзья, давайте выключим свет в ванной, наверное забыли.
+  mode: single
+- id: '1607875489498'
+  alias: 1) Звонят в дверь
+  description: Когда позвонили во входную дверь
+  trigger:
+  - platform: state
+    entity_id: binary_sensor.bell_8_1_2
+    to: 'on'
+  condition: []
+  action:
+  - data:
+      filename: /media/records/door_{{ now().strftime('%d%m_%H%M') }}.jpg
+    service: camera.snapshot
+    target:
+      entity_id: camera.door_cam
+  - service: media_player.play_media
+    data:
+      media_content_id: /share/station.mp3
+      media_content_type: music
+    entity_id: media_player.player_vlc
+  - service: tts.google_say
+    data:
+      entity_id: media_player.player_vlc
+      message: Внимание, взонок в дверь, откройте, откройте
+  - type: flash
+    device_id: 7b2f58d877804163925de34fb727ebb6
+    entity_id: light.big_lights_2
+    domain: light
+  - delay:
+      hours: 0
+      minutes: 0
+      seconds: 3
+      milliseconds: 0
+  - data:
+      target: -461871972
+      file: /media/records/door_{{ now().strftime('%d%m_%H%M') }}.jpg
+      caption: Позвонили во ВХОДНУЮ дверь. НЕ домофон! {{now().strftime('%H:%M %d-%m-%Y')}}.
+    service: telegram_bot.send_photo
+  - service: esphome.feeder_play_rtttl
+    data:
+      song_str: MissionImp:d=16,o=6,b=95:32d,32d#,32d,32d#,32d,32d#,32d,32d#,32d,32d,32d#,32e,32f,32f#,32g,g,8p,g,8p,a#,p,c7,p,
+        g,8p,g,8p,f,p,f#,p,g,8p,g,8p,a#,p,c7,p,g,8p,g,8p,f,p,f#,p,a#,g,2d,32p,a#,g,2c#,32p,a#,g,2c,a#5,8c,2p,32p,a#5,g5,
+        2f#,32p,a#5,g5,2f,32p,a#5,g5,2e,d#,8d
+  - service: esphome.bath_mirror_play_rtttl
+    data:
+      song_str: MissionImp:d=16,o=6,b=95:32d,32d#,32d,32d#,32d,32d#,32d,32d#,32d,32d,32d#,32e,32f,32f#,32g,g,8p,g,
+        8p,a#,p,c7,p,g,8p,g,8p,f,p,f#,p,g,8p,g,8p,a#,p,c7,p,g,8p,g,8p,f,p,f#,p,a#,g,2d,32p,a#,g,2c#,32p,a#,
+        g,2c,a#5,8c,2p,32p,a#5,g5,2f#,32p,a#5,g5,2f,32p,a#5,g5,2e,d#,8d
+  - delay:
+      hours: 0
+      minutes: 0
+      seconds: 1
+      milliseconds: 0
+  - type: turn_off
+    device_id: 7b2f58d877804163925de34fb727ebb6
+    entity_id: light.small_lights_2
+    domain: light
+  - service: notify.lg_webos_smart_tv
+    data:
+      message: Позвонили во ВХОДНУЮ дверь. НЕ домофон!
+  - type: turn_on
+    device_id: 33b1c560942248aa9fdd94ae9b6ec4af
+    entity_id: light.holl_lights
+    domain: light
+    brightness_pct: 100
+  - delay:
+      hours: 0
+      minutes: 1
+      seconds: 0
+      milliseconds: 0
+  - type: turn_off
+    device_id: 33b1c560942248aa9fdd94ae9b6ec4af
+    entity_id: light.holl_lights
+    domain: light
+  mode: single
+- id: '1608924624331'
+  alias: 5.11) PIR Logia RESET Switch 433
+  description: Сброс состояния переключателя PIR лоджии 433
+  trigger:
+  - platform: state
+    entity_id: switch.logia_pir
+    to: 'on'
+    for: 00:00:01
+    from: 'off'
+  condition: []
+  action:
+  - delay:
+      hours: 0
+      minutes: 0
+      seconds: 30
+      milliseconds: 0
+  - service: switch.turn_off
+    data: {}
+    target:
+      entity_id: switch.logia_pir
+  mode: single
+- id: '1608968826059'
+  alias: 21) Кухня, подсветка WLED
+  description: Подсветка кухни при датчике движения
+  use_blueprint:
+    path: homeassistant/motion_light.yaml
+    input:
+      no_motion_wait: 300
+      motion_entity: binary_sensor.motion_kitchen_2_2_2
+      light_target:
+        entity_id: light.led_top
+- id: '1610094111137'
+  alias: 16) Горячая вода, отключили -> Telegram
+  description: Когда температура в трубе ниже 20С
+  trigger:
+  - platform: numeric_state
+    entity_id: sensor.degc_hot_water_in_bone
+    below: '25'
+    for:
+      hours: 1
+      minutes: 0
+      seconds: 0
+  condition: []
+  action:
+  - service: notify.share_chat
+    data:
+      message: Уже 15 минут в трубе горячей воды ниже 25С. Возможно отключили. Желательно
+        перекрыть ГВС. {{now().strftime('%H:%M %d-%m-%Y')}}
+  mode: single
+- id: '1610383654854'
+  alias: 11.2) T2 (ночь) коррект показаний
+  description: T2 (ночь) новые показания счетчика эл. энергии
+  trigger:
+  - platform: state
+    entity_id: input_number.box_t2
+  condition: []
+  action:
+  - service: utility_meter.calibrate
+    data:
+      value: '{{ states(''input_number.box_t2'') | int }}'
+    entity_id: sensor.total_energy_noch_t2
+  mode: single
+- id: '1610384418618'
+  alias: 11.1) T1 (день) коррект показаний счетчика
+  description: 'Корректировка показаний счетчика эл. энергии T1 (день) '
+  trigger:
+  - platform: state
+    entity_id: input_number.box_t1
+  condition: []
+  action:
+  - service: utility_meter.calibrate
+    data:
+      value: '{{ states(''input_number.box_t1'') | int }}'
+    entity_id: sensor.total_energy_den_t1
+  mode: single
+- id: '1611734711852'
+  alias: 18.2) Жалюзи открыть (б.комната) когда светло
+  description: Работа жалюзей в большой комнате по солнцу
+  trigger:
+  - platform: time
+    at: 09:00:00
+  - platform: state
+    entity_id: light.big_lights_2
+    to: 'off'
+  condition:
+  - condition: state
+    entity_id: light.big_lights_2
+    state: 'off'
+  - condition: and
+    conditions:
+    - condition: sun
+      before: sunset
+      after: sunrise
+      after_offset: 01:00:00
+  action:
+  - service: cover.set_cover_position
+    data:
+      position: 50
+    target:
+      device_id: 386dc52cd88f943b78e207884b3cc69d
+  mode: single
+- id: '1611735338436'
+  alias: 18.1) Жалюзи закрыть (б.комната) когда темно
+  description: Работа жалюзей в большой комнате по солнцу
+  trigger:
+  - platform: device
+    type: turned_on
+    device_id: 7b2f58d877804163925de34fb727ebb6
+    entity_id: light.big_lights_2
+    domain: light
+    for:
+      hours: 0
+      minutes: 0
+      seconds: 0
+  - platform: sun
+    event: sunset
+    offset: -01:00:00
+  condition:
+  - condition: sun
+    before: sunset
+    after_offset: -01:00:00
+    after: sunrise
+  action:
+  - service: cover.close_cover
+    data: {}
+    target:
+      device_id: 386dc52cd88f943b78e207884b3cc69d
+  mode: single
+- id: '1615646052156'
+  alias: 4.1) Старт таймер климата б.комнаты (drivent)
+  description: после вкл. режима авто запускается период сканирования
+  trigger:
+  - platform: state
+    entity_id: input_boolean.bigroom_climatctrl
+    to: 'on'
+  action:
+  - service: timer.start
+    data: {}
+    target:
+      entity_id: timer.climat_ctrl
+  initial_state: true
+  mode: single
+- id: '1615646052157'
+  alias: 4.2) Стоп таймер климата б.комнаты (drivent)
+  trigger:
+  - platform: state
+    entity_id: input_boolean.bigroom_climatctrl
+    to: 'off'
+  action:
+  - service: timer.cancel
+    entity_id: timer.climat_ctrl
+  initial_state: true
+  mode: single
+- id: '1615646052158'
+  alias: 4.3) Обработка таймера климата б.команты (drivent)
+  trigger:
+  - platform: event
+    event_type: timer.finished
+    event_data:
+      entity_id: timer.climat_ctrl
+  condition: []
+  action:
+  - choose:
+    - conditions:
+      - condition: template
+        value_template: '{{ (states("sensor.air_temperature_2") | float ) < (states("input_number.t_min")
+          | float) }}'
+      sequence:
+      - service: cover.set_cover_position
+        data_template:
+          position: 0
+        entity_id: cover.drivent_9e5
+      - service: timer.start
+        data: {}
+        target:
+          entity_id: timer.climat_ctr
+    - conditions:
+      - condition: template
+        value_template: '{{((states("sensor.window_position") | int) < states("input_number.window_max")
+          | int ) and ((states("sensor.openweathermap_forecast_temperature") | float)
+          > 10) and ((states("sensor.co2_mhz19_4") | int ) > states("input_number.co2_max")
+          | int) and ((states("sensor.air_temperature_2") | float ) > states("input_number.t_min")
+          | float) }}'
+      sequence:
+      - service: cover.set_cover_position
+        data_template:
+          position: "{% if (states(\"sensor.window_position\") | int ) < ((states(\"\
+            input_number.window_max\") | int) - 20) %}\n  {{(states(\"sensor.window_position\"\
+            ) | int) + 20 }}\n{%- else -%}\n  {{ states(\"input_number.window_max\"\
+            ) | int }}\n{%- endif -%}\n"
+        entity_id: cover.drivent_9e5
+      - service: timer.start
+        data: {}
+        target:
+          entity_id: timer.climat_ctrl
+    - conditions:
+      - condition: template
+        value_template: '{{((states("sensor.window_position") | int) < states("input_number.window_max")
+          | int ) and ((states("sensor.openweathermap_forecast_temperature") | float)
+          > 0) and ((states("sensor.openweathermap_forecast_temperature") | float)
+          < 10) and ((states("sensor.co2_mhz19_4") | int ) > states("input_number.co2_max")
+          | int) and ((states("sensor.air_temperature_2") | float ) > states("input_number.t_min")
+          | float)}}'
+      sequence:
+      - service: cover.set_cover_position
+        data_template:
+          position: "{% if (states(\"sensor.window_position\") | int ) < ((states(\"\
+            input_number.window_max\") | int) - 10) %}\n  {{(states(\"sensor.window_position\"\
+            ) | int) + 10 }}\n{%- else -%}\n  {{ states(\"input_number.window_max\"\
+            ) | int }}\n{%- endif -%}\n"
+        entity_id: cover.drivent_9e5
+      - service: timer.start
+        data:
+          duration: '0'
+        target:
+          entity_id: timer.climat_ctrl
+    - conditions:
+      - condition: template
+        value_template: '{{((states("sensor.window_position") | int) < states("input_number.window_max")
+          | int ) and ((states("sensor.openweathermap_forecast_temperature") | float)
+          > -10) and ((states("sensor.openweathermap_forecast_temperature") | float)
+          < 0) and ((states("sensor.co2_mhz19_4") | int ) > states("input_number.co2_max")
+          | int) and ((states("sensor.air_temperature_2") | float ) > states("input_number.t_min")
+          | float)}}'
+      sequence:
+      - service: cover.set_cover_position
+        data_template:
+          position: "{% if (states(\"sensor.window_position\") | int ) < ((states(\"\
+            input_number.window_max\") | int) - 5) %}\n  {{(states(\"sensor.window_position\"\
+            ) | int) + 5 }}\n{%- else -%}\n  {{ states(\"input_number.window_max\"\
+            ) | int }}\n{%- endif -%}\n"
+        entity_id: cover.drivent_9e5
+      - service: timer.start
+        data: {}
+        target:
+          entity_id: timer.climat_ctrl
+    - conditions:
+      - condition: template
+        value_template: '{{((states("sensor.window_position") | int) < states("input_number.window_max")
+          | int ) and ((states("sensor.openweathermap_forecast_temperature") | float)
+          > -50) and ((states("sensor.openweathermap_forecast_temperature") | float)
+          < -10) and ((states("sensor.co2_mhz19_4") | int ) > states("input_number.co2_max")
+          | int) and ((states("sensor.air_temperature_2") | float ) > states("input_number.t_min")
+          | float)}}'
+      sequence:
+      - service: cover.set_cover_position
+        data_template:
+          position: "{% if (states(\"sensor.window_position\") | int ) < ((states(\"\
+            input_number.window_max\") | int) - 2) %}\n  {{(states(\"sensor.window_position\"\
+            ) | int) + 2 }}\n{%- else -%}\n  {{ states(\"input_number.window_max\"\
+            ) | int }}\n{%- endif -%}\n"
+        entity_id: cover.drivent_9e5
+      - service: timer.start
+        data: {}
+        target:
+          entity_id: timer.climat_ctrl
+    - conditions:
+      - condition: template
+        value_template: '{{ (states("sensor.air_temperature_2") | float ) < (states("input_number.t_min")
+          | float)}}'
+      sequence:
+      - service: cover.set_cover_position
+        data_template:
+          position: "{% if (states(\"sensor.window_position\") | int ) < ((states(\"\
+            input_number.window_max\") | int) - 10) %}\n  {{(states(\"sensor.window_position\"\
+            ) | int) + 10 }}\n{%- else -%}\n  {{ states(\"input_number.window_max\"\
+            ) | int }}\n{%- endif -%}\n"
+        entity_id: cover.drivent_9e5
+    - conditions:
+      - condition: template
+        value_template: '{{ states("sensor.window_position") | int > states("input_number.window_max")
+          | int  }}'
+      sequence:
+      - service: cover.set_cover_position
+        data_template:
+          position: '{{ states("input_number.window_max") | int }}'
+        entity_id: cover.drivent_9e5
+      - service: timer.start
+        data: {}
+        target:
+          entity_id: timer.climat_ctrl
+    default:
+    - service: timer.start
+      data: {}
+      target:
+        entity_id: timer.kr_climat_ctrl
+  initial_state: true
+  mode: single
+- id: '1616228391628'
+  alias: '! Reboot system at 4:00'
+  description: Если память занята на 80% - reboot
+  trigger:
+  - platform: time
+    at: 04:00:00
+  condition:
+  - condition: numeric_state
+    entity_id: sensor.memory_use_percent
+    above: '80'
+  action:
+  - service: hassio.host_reboot
+  mode: single
+- id: '1617611258005'
+  alias: 29) Кормушка Маси. Порции
+  description: Слайдер порций на WEB
+  trigger:
+  - platform: state
+    entity_id: input_number.feed_portion
+  condition: []
+  action:
+  - service: esphome.feed_portion
+    data_template:
+      target: '{{ trigger.to_state.state | int }}'
+  mode: single
+- id: '1618295290925'
+  alias: 25) Мыть машину в telegram
+  description: Если пора помыть машину по погоде на 3 дня. В личный telegram.
+  trigger:
+  - entity_id: binary_sensor.myt_mashinu
+    for: 01:00:00
+    from: 'off'
+    platform: state
+    to: 'on'
+  condition: []
+  action:
+  - service: telegram_bot.send_message
+    data:
+      message: Погода на 3 дня показывает, что пора помыть машину.
+  mode: single
+  max: 2
+- id: '1618565126747'
+  alias: 5.7) Б.окно окрыть 40% (433)
+  description: Окно большой комнаты открыть на 40% (пульт без кольца)
+  trigger:
+  - entity_id: switch.b_okno_50
+    platform: state
+    to: 'off'
+  condition: []
+  action:
+  - service: cover.set_cover_position
+    data:
+      position: 40
+    target:
+      entity_id: cover.drivent_9e5
+  - entity_id: switch.b_okno_50
+    service: switch.turn_on
+  mode: single
+- id: '1620019931506'
+  alias: 11.3) ХВС коррект показаний счетчика
+  description: Корректировка показаний счетчика горячей воды
+  trigger:
+  - platform: state
+    entity_id: input_number.box_wcold
+  condition: []
+  action:
+  - service: utility_meter.calibrate
+    data:
+      value: '{{ states(''input_number.box_wcold'') }}'
+    entity_id: sensor.cold_water_total
+  mode: single
+- id: '1620024331778'
+  alias: 11.4) ГВС коррект показаний счетчика
+  description: Корректировка показаний счетчика горячей воды
+  trigger:
+  - platform: state
+    entity_id: input_number.box_whot
+  condition: []
+  action:
+  - service: utility_meter.calibrate
+    data:
+      value: '{{ states(''input_number.box_whot'') }}'
+    entity_id: sensor.hot_water_total
+  mode: single
+- id: '1620667771394'
+  alias: Z2M - Aqara Opple switch 3 bands
+  description: Настенный выключатель с тремя клавишами
+  use_blueprint:
+    path: homeassistant/aqara_6_buttons.yaml
+    input:
+      switch: sensor.aqara_opple_action
+      light_1:
+        entity_id:
+        - light.big_lights_2
+        - light.small_lights_2
+      cover_2:
+        device_id: 386dc52cd88f943b78e207884b3cc69d
+      cover_3:
+        entity_id:
+        - cover.drivent_9e5
+- id: '1622133603379'
+  alias: 26) Отключили эл.питание 220в. Аккум. ниже 11 вольт (telegram)
+  description: Когда нет AC~220v и аккумулятор сел. Пора выключить сервер Pegatron.
+  trigger:
+  - platform: numeric_state
+    entity_id: sensor.vcc_voltage
+    below: '11.3'
+    for: 00:05:00
+  condition: []
+  action:
+  - service: notify.share_chat
+    data:
+      message: Дома нет AC~220v. Батарея ниже 11.2 вольта. Сервер умного дома отключается
+        через 1 минуту.
+  - wait_template: ''
+    continue_on_timeout: false
+    timeout: 00:01:00
+  - service: hassio.host_shutdown
+  mode: single
+- id: '1624887276090'
+  alias: 16.1) Горячая вода, включили -> Telegram
+  description: Когда температура в трубе выше 30С
+  trigger:
+  - platform: numeric_state
+    entity_id: sensor.degc_hot_water_in_bone
+    for:
+      hours: 0
+      minutes: 20
+      seconds: 0
+    above: '30'
+  condition: []
+  action:
+  - service: notify.share_chat
+    data:
+      message: В трубе горячей воды выше 30С. Включили!!! {{now().strftime('%H:%M
+        %d-%m-%Y')}}
+  mode: single
+- id: '1626164657272'
+  alias: 28) Стиралка, бельё, финиш -> Telegram
+  description: Когда бельё постиралось, пора доставать и сушить
+  trigger:
+  - platform: state
+    entity_id: binary_sensor.stiralka
+    to: 'on'
+    from: 'off'
+    for: 01:20:00
+  condition:
+  - condition: state
+    entity_id: binary_sensor.stiralka
+    state: 'off'
+    for: 00:05:00
+  action:
+  - service: notify.share_chat
+    data:
+      message: Стиралка остановилась, пора сушить бельё.
+  mode: single
+- id: '1638087341095'
+  alias: Пробки на работу -> telegram
+  description: Если проезд занимает более 25 минут - скидывать в Telegram
+  trigger:
+  - platform: numeric_state
+    entity_id: sensor.dom_rabota
+    above: '22'
+    for:
+      hours: 0
+      minutes: 5
+      seconds: 0
+      milliseconds: 0
+  condition:
+  - condition: time
+    weekday:
+    - mon
+    - tue
+    - wed
+    - thu
+    - fri
+    after: 08:35
+    before: 09:15
+  action:
+  - service: notify.telegram
+    data:
+      message: 'Пробки на работу более 23 минут, расчетное время: {{ state_attr(''sensor.dom_rabota'',
+        ''duration'')|float|round(0) }}мин.,  маршрут: {{ state_attr(''sensor.dom_rabota'',
+        ''route'') }}'
+  mode: single
+- id: '1639208920787'
+  alias: 9.4 Holl lights based on sun elevation
+  description: Уровень света света в коридоре
+  use_blueprint:
+    path: EvTheFuture/dim_lights_based_on_sun_elevation.yaml
+    input:
+      target_lights:
+        entity_id: light.holl_lights
+      min_brightness: 25
+      reverse: false
+      start_elevation_setting: 11
+      allowance: 100
+      transition_time: 2
+- id: '1644252149438'
+  alias: Tugella аккумулятор меньше 11.4 вольт -> telegram
+  description: сел аккум в Тугелле - скидывать в Telegram
+  trigger:
+  - platform: numeric_state
+    entity_id: sensor.bat_12v
+    for:
+      hours: 1
+      minutes: 0
+      seconds: 10
+    below: '11.6'
+  condition: []
+  action:
+  - service: notify.telegram
+    data:
+      message: '!!! Tugella - аккумулятор сел. Напряжение = {{states(''sensor.bat_12v'')|float|round(1)}}
+        вольт. {{now().strftime(''%H:%M %d-%m-%Y'')}}'
+  mode: single
+- id: '1645254105567'
+  alias: 'TV LG WebOS Wakeup '
+  description: Включение телевизора
+  trigger:
+  - platform: device
+    device_id: 1585eaa56f8944cd29426ec8f7a30ff5
+    domain: webostv
+    type: webostv.turn_on
+  condition: []
+  action:
+  - service: wake_on_lan.send_magic_packet
+    data:
+      mac: 38:8C:50:66:C9:AF
+  mode: single
