@@ -193,14 +193,6 @@ telegram_bot:
     
 ##########################################
 
-#webostv:
-#  host: 192.168.230.84 # Ether LG OLED55C7V
-#  #other settings
-#  turn_on_action:
-#    service: wake_on_lan.send_magic_packet
-#    data:
-#      mac: "38:8C:50:66:C9:AF" # Ether
-
 wake_on_lan: # enables `wake_on_lan` integration
 
 #########################################
@@ -263,7 +255,7 @@ input_select:
 alarm_control_panel:
   - platform: manual
     name: Home Alarm
-    code: '1234'
+    code: !secret code
     arming_time: 30
     delay_time: 20
     trigger_time: 4
